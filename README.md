@@ -43,17 +43,12 @@ data = pd.read_csv("ner_dataset.csv", encoding="latin1")
 
 data.head(50)
 data = data.fillna(method="ffill")
-
-
 data.head(50)
-
 print("Unique words in corpus:", data['Word'].nunique())
 print("Unique tags in corpus:", data['Tag'].nunique())
-
 words=list(data['Word'].unique())
 words.append("ENDPAD")
 tags=list(data['Tag'].unique())
-
 print("Unique tags are:", tags)
 num_words = len(words)
 num_tags = len(tags)
@@ -80,47 +75,32 @@ class SentenceGetter(object):
             return None
 getter = SentenceGetter(data)
 sentences = getter.sentences
-
-
 len(sentences)
-
-
 sentences[0]
 
 word2idx = {w: i + 1 for i, w in enumerate(words)}
 tag2idx = {t: i for i, t in enumerate(tags)}
 
-
 word2idx
 plt.hist([len(s) for s in sentences], bins=50)
 plt.show()
 X1 = [[word2idx[w[0]] for w in s] for s in sentences]
-
-
 type(X1[0])
-
-
 X1[0]
 max_len = 50
 
 X = sequence.pad_sequences(maxlen=max_len,
                   sequences=X1, padding="post",
                   value=num_words-1)
-
-
 X[0]
 y1 = [[tag2idx[w[2]] for w in s] for s in sentences]
-
-
 y = sequence.pad_sequences(maxlen=max_len,
                   sequences=y1,
                   padding="post",
                   value=tag2idx["O"])
 
-
 X_train, X_test, y_train, y_test = train_test_split(X, y,
                                                     test_size=0.2, random_state=1)
-
 X_train[0]
 y_train[0]
 input_word = layers.Input(shape=(max_len,))
@@ -162,9 +142,6 @@ print("{:25}{:5}\t {}\n".format("Word", "True", "Pred"))
 print("-" *50)
 for w, true, pred in zip(X_test[i], y_true, p[0]):
     print("{:35}{}\t{}".format(words[w-1], tags[true], tags[pred]))
-
-
-
 
 ```
 
